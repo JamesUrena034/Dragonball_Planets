@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import edu.ucne.dragonball_planets.presentation.detail.DetailPlanetScreen
-import edu.ucne.dragonball_planets.presentation.planet_list.ListPlanetScreen
+import edu.ucne.dragonball_planets.presentation.list.ListPlanetScreen
 
 @Composable
 fun NavHost(
