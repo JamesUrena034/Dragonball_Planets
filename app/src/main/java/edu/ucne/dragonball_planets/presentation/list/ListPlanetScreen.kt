@@ -1,4 +1,4 @@
-package edu.ucne.dragonball_planets.presentation.planet_list
+package edu.ucne.dragonball_planets.presentation.list
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,10 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import edu.ucne.dragonball_planets.data.remote.dto.PlanetDto
-import edu.ucne.dragonball_planets.presentation.list.ListPlanetUiEvent
-import edu.ucne.dragonball_planets.presentation.list.ListPlanetUiState
-import edu.ucne.dragonball_planets.presentation.list.ListPlanetViewModel
+import edu.ucne.dragonball_planets.domain.model.Planet
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -103,7 +100,7 @@ fun ListPlanetBodyScreen(
 
 @Composable
 fun PlanetItem(
-    planet: PlanetDto,
+    planet: Planet,
     onClick: () -> Unit
 ) {
     ElevatedCard(
@@ -145,7 +142,7 @@ fun PlanetItem(
 @Composable
 fun ListPlanetBodyScreenPreview() {
     val samplePlanets = listOf(
-        PlanetDto(
+        Planet(
             id = 2,
             name = "Tierra",
             isDestroyed = false,

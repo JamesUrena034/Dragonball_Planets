@@ -40,38 +40,36 @@ class ListPlanetViewModel @Inject constructor(
 
     private fun loadPlanets() {
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true, error = null) }
             val current = _state.value
-
-            val result = getPlanetsUseCase(
+            getPlanetsUseCase(
                 name = current.filterName.takeIf { it.isNotBlank() }
-            )
-
-            when (result) {
-                is Resource.Success -> {
-                    val data = result.data ?: emptyList()
-                    val filteredData = if (current.filterIsDestroyed != null) {
-                        data.filter { it.isDestroyed == current.filterIsDestroyed }
-                    } else {
-                        data
+            ).collect { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        val data = result.data ?: emptyList()
+                        val filteredData = if (current.filterIsDestroyed != null) {
+                            data.filter { it.isDestroyed == current.filterIsDestroyed }
+                        } else {
+                            data
+                        }
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                planets = filteredData
+                            )
+                        }
                     }
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            planets = filteredData
-                        )
+                    is Resource.Error -> {
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                error = result.message
+                            )
+                        }
                     }
-                }
-                is Resource.Error -> {
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            error = result.message
-                        )
+                    is Resource.Loading -> {
+                        _state.update { it.copy(isLoading = true) }
                     }
-                }
-                is Resource.Loading -> {
-                    _state.update { it.copy(isLoading = true) }
                 }
             }
         }
