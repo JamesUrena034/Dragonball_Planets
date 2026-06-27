@@ -1,10 +1,10 @@
-package edu.ucne.dragonball_planets.presentation.detail
+package edu.ucne.dragonball_planets.presentation.planet.detail
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,8 +17,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import edu.ucne.dragonball_planets.domain.model.Planet
-import edu.ucne.dragonball_planets.presentation.list.ListPlanetBodyScreen
-import edu.ucne.dragonball_planets.presentation.list.ListPlanetUiState
+import edu.ucne.dragonball_planets.presentation.planet.list.ListPlanetBodyScreen
+import edu.ucne.dragonball_planets.presentation.planet.list.ListPlanetUiState
 
 @Composable
 fun DetailPlanetScreen(
@@ -44,7 +44,7 @@ fun DetailPlanetBodyScreen(
                 title = { Text("Detalle del Planeta") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Filled.ArrowBack, null)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Atrás")
                     }
                 }
             )
@@ -122,6 +122,7 @@ fun ListPlanetBodyScreenPreview() {
         Surface {
             ListPlanetBodyScreen(
                 state = state,
+                drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
                 onEvent = {},
                 onPlanetClick = {}
             )

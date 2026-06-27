@@ -1,10 +1,11 @@
-package edu.ucne.dragonball_planets.presentation.list
+package edu.ucne.dragonball_planets.presentation.planet.list
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -16,16 +17,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import edu.ucne.dragonball_planets.domain.model.Planet
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListPlanetScreen(
     viewModel: ListPlanetViewModel = hiltViewModel(),
+    drawerState: DrawerState,
     onPlanetClick: (Int) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     ListPlanetBodyScreen(
         state = state,
+        drawerState = drawerState,
         onEvent = viewModel::onEvent,
         onPlanetClick = onPlanetClick
     )
@@ -35,13 +39,25 @@ fun ListPlanetScreen(
 @Composable
 fun ListPlanetBodyScreen(
     state: ListPlanetUiState,
+    drawerState: DrawerState,
     onEvent: (ListPlanetUiEvent) -> Unit,
     onPlanetClick: (Int) -> Unit
 ) {
+    val scope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Dragon Ball Planets") }
+                title = { Text("Dragon Ball Planets") },
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            scope.launch { drawerState.open() }
+                        }
+                    ) {
+                        Icon(Icons.Default.Menu, contentDescription = "Menu")
+                    }
+                }
             )
         }
     ) { padding ->
@@ -134,34 +150,6 @@ fun PlanetItem(
                         MaterialTheme.colorScheme.primary
                 )
             }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ListPlanetBodyScreenPreview() {
-    val samplePlanets = listOf(
-        Planet(
-            id = 2,
-            name = "Tierra",
-            isDestroyed = false,
-            description = "Planeta de los guerreros Z",
-            image = ""
-        )
-    )
-    val state = ListPlanetUiState(
-        planets = samplePlanets,
-        filterName = ""
-    )
-
-    MaterialTheme {
-        Surface {
-            ListPlanetBodyScreen(
-                state = state,
-                onEvent = {},
-                onPlanetClick = {}
-            )
         }
     }
 }

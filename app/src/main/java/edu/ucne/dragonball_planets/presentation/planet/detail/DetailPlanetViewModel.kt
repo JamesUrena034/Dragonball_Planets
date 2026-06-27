@@ -1,4 +1,4 @@
-package edu.ucne.dragonball_planets.presentation.detail
+package edu.ucne.dragonball_planets.presentation.planet.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
