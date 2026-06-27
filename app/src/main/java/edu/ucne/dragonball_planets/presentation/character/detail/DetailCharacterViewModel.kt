@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.ucne.dragonball_planets.data.remote.Resource
-import edu.ucne.dragonball_planets.domain.usecase.GetPlanetDetailUseCase
+import edu.ucne.dragonball_planets.domain.usecase.GetCharacterDetailUseCase
 import edu.ucne.dragonball_planets.presentation.navigation.Screen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,28 +15,28 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailPlanetViewModel @Inject constructor(
-    private val getPlanetDetailUseCase: GetPlanetDetailUseCase,
+class DetailCharacterViewModel @Inject constructor(
+    private val getCharacterDetailUseCase: GetCharacterDetailUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(DetailPlanetUiState())
+    private val _state = MutableStateFlow(DetailCharacterUiState())
     val state = _state.asStateFlow()
 
     init {
-        val args = savedStateHandle.toRoute<Screen.PlanetDetail>()
-        loadPlanet(args.id)
+        val args = savedStateHandle.toRoute<Screen.CharacterDetail>()
+        loadCharacter(args.id)
     }
 
-    private fun loadPlanet(id: Int) {
+    private fun loadCharacter(id: Int) {
         viewModelScope.launch {
-            getPlanetDetailUseCase(id).collect { result ->
+            getCharacterDetailUseCase(id).collect { result ->
                 when (result) {
                     is Resource.Success ->
                         _state.update {
                             it.copy(
                                 isLoading = false,
-                                planet = result.data
+                                character = result.data
                             )
                         }
                     is Resource.Error ->

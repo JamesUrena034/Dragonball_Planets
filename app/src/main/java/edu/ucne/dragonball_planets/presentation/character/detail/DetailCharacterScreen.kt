@@ -10,23 +10,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import edu.ucne.dragonball_planets.domain.model.Planet
-import edu.ucne.dragonball_planets.presentation.list.ListPlanetBodyScreen
-import edu.ucne.dragonball_planets.presentation.list.ListPlanetUiState
 
 @Composable
-fun DetailPlanetScreen(
-    viewModel: DetailPlanetViewModel = hiltViewModel(),
+fun DetailCharacterScreen(
+    viewModel: DetailCharacterViewModel = hiltViewModel(),
     onBack: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    DetailPlanetBodyScreen(
+    DetailCharacterBodyScreen(
         state = state,
         onBack = onBack
     )
@@ -34,14 +29,14 @@ fun DetailPlanetScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailPlanetBodyScreen(
-    state: DetailPlanetUiState,
+fun DetailCharacterBodyScreen(
+    state: DetailCharacterUiState,
     onBack: () -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Detalle del Planeta") },
+                title = { Text("Detalle del Personaje") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.Filled.ArrowBack, null)
@@ -56,7 +51,7 @@ fun DetailPlanetBodyScreen(
             }
         }
 
-        state.planet?.let { planet ->
+        state.character?.let { character ->
             Column(
                 modifier = Modifier
                     .padding(padding)
@@ -65,8 +60,8 @@ fun DetailPlanetBodyScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 AsyncImage(
-                    model = planet.image,
-                    contentDescription = planet.name,
+                    model = character.image,
+                    contentDescription = character.name,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(300.dp)
@@ -75,14 +70,33 @@ fun DetailPlanetBodyScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = planet.name,
+                    text = character.name,
                     style = MaterialTheme.typography.headlineMedium
                 )
 
                 Text(
-                    text = if (planet.isDestroyed) "Estado: Destruido" else "Estado: Activo",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = if (planet.isDestroyed) Color.Red else Color.Green
+                    text = "Raza: ${character.race}",
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                Text(
+                    text = "Genero: ${character.gender}",
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                Text(
+                    text = "Ki: ${character.ki}",
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                Text(
+                    text = "Ki Maximo: ${character.maxKi}",
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                Text(
+                    text = "Afiliacion: ${character.affiliation}",
+                    style = MaterialTheme.typography.titleMedium
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -93,38 +107,10 @@ fun DetailPlanetBodyScreen(
                 )
 
                 Text(
-                    text = planet.description,
+                    text = character.description,
                     style = MaterialTheme.typography.bodyLarge
                 )
             }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ListPlanetBodyScreenPreview() {
-    val samplePlanets = listOf(
-        Planet(
-            id = 2,
-            name = "Tierra",
-            isDestroyed = false,
-            description = "Planeta de los guerreros Z",
-            image = ""
-        )
-    )
-    val state = ListPlanetUiState(
-        planets = samplePlanets,
-        filterName = ""
-    )
-
-    MaterialTheme {
-        Surface {
-            ListPlanetBodyScreen(
-                state = state,
-                onEvent = {},
-                onPlanetClick = {}
-            )
         }
     }
 }
