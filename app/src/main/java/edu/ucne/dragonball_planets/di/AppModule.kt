@@ -7,8 +7,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import edu.ucne.dragonball_planets.data.remote.DragonBallApi
+import edu.ucne.dragonball_planets.data.remote.remotedatasource.CharacterRemoteDataSource
 import edu.ucne.dragonball_planets.data.remote.remotedatasource.PlanetRemoteDataSource
+import edu.ucne.dragonball_planets.data.repository.CharacterRepositoryImpl
 import edu.ucne.dragonball_planets.data.repository.PlanetRepositoryImpl
+import edu.ucne.dragonball_planets.domain.repository.CharacterRepository
 import edu.ucne.dragonball_planets.domain.repository.PlanetRepository
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -21,8 +24,7 @@ object AppModule {
     @Singleton
     @Provides
     fun provideMoshi(): Moshi {
-        return Moshi
-            .Builder()
+        return Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
             .build()
     }
@@ -39,13 +41,25 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRemoteDataSource(api: DragonBallApi): PlanetRemoteDataSource {
+    fun providePlanetRemoteDataSource(api: DragonBallApi): PlanetRemoteDataSource {
         return PlanetRemoteDataSource(api)
     }
 
     @Provides
     @Singleton
-    fun provideRepository(remoteDataSource: PlanetRemoteDataSource): PlanetRepository {
+    fun providePlanetRepository(remoteDataSource: PlanetRemoteDataSource): PlanetRepository {
         return PlanetRepositoryImpl(remoteDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCharacterRemoteDataSource(api: DragonBallApi): CharacterRemoteDataSource {
+        return CharacterRemoteDataSource(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCharacterRepository(remoteDataSource: CharacterRemoteDataSource): CharacterRepository {
+        return CharacterRepositoryImpl(remoteDataSource)
     }
 }
